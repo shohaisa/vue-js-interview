@@ -11,28 +11,26 @@ export default {
     computed: {
         ...mapGetters(["operator", "age", "address"]),
       getUsers() {
-          if (this.address !== '') {
-              return this.users.filter(
+          let filterUsers = this.users
+          if (this.address !== null) {
+                  filterUsers = this.users.filter(
                   (user) => user.address.city === this.address
               )
-          }else if (this.age !== '') {
+          }
+          if (this.age !== '') {
               switch (this.operator) {
                   case '=':
-                      return this.users.filter(
-                          (user) => user.age == this.age
-                      )
+                      filterUsers = filterUsers.filter((user) => user.age == this.age)
+                      break
                   case '<':
-                      return this.users.filter(
-                          (user) => user.age > this.age
-                      )
+                      filterUsers =  filterUsers.filter((user) => user.age > this.age)
+                      break
                   case '>':
-                      return this.users.filter(
-                          (user) => user.age < this.age
-                      )
+                      filterUsers = filterUsers.filter((user) => user.age < this.age)
               }
           }
 
-          return this.users
+          return filterUsers
       }
     },
     mounted() {
@@ -48,10 +46,10 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="userlist">
       <div style="display: flex">
       </div>
-      <v-list class="user-list" three-line>
+      <v-list class="userlist-items" three-line>
           <template v-for="item in getUsers">
               <v-list-item
                       :key="item.id"
@@ -74,7 +72,8 @@ export default {
 </template>
 
 <style scoped>
-.user-list {
+
+.userlist-items {
     overflow: scroll;
     max-height: 700px;
 }

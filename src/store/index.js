@@ -8,7 +8,7 @@ const _store = new Vuex.Store({
     state: {
         age: '',
         operator: '',
-        address: '',
+        address: null,
     },
     getters: {
         age: (state) => state.age,
