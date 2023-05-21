@@ -6,6 +6,14 @@ export default {
     data () {
         return {
             users: [],
+            dialog: false,
+            userInfo: {
+              image: '',
+              address: {
+                address: '',
+                city: ''
+              }
+            }
         }
     },
     computed: {
@@ -33,6 +41,12 @@ export default {
           return filterUsers
       }
     },
+  methods: {
+      getUserInfo (id) {
+        this.userInfo = this.users.find(el => el.id == id)
+        this.dialog = true
+      }
+  },
     mounted() {
         fetch('https://dummyjson.com/users')
             .then((response) => {
@@ -49,10 +63,27 @@ export default {
   <div class="userlist">
       <div style="display: flex">
       </div>
+        <v-dialog
+          v-model="dialog"
+          width="400"
+        >
+          <v-card>
+            <div class="d-flex align-center" >
+              <v-avatar size="150">
+                <v-img :src="userInfo.image"></v-img>
+              </v-avatar>
+              <v-card-title>{{userInfo.firstName}} {{userInfo.lastName}}</v-card-title>
+            </div>
+            <v-card-text>{{userInfo.address.city}}, {{userInfo.address.address}}</v-card-text>
+            <v-btn  block @click="dialog = false">Закрыть</v-btn>
+          </v-card>
+        </v-dialog>
       <v-list class="userlist-items" three-line>
           <template v-for="item in getUsers">
+
               <v-list-item
-                      :key="item.id"
+                  @click="getUserInfo(item.id)"
+                  :key="item.id"
               >
                   <v-list-item-avatar>
                       <v-img :src="item.image"></v-img>
